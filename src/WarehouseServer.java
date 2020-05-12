@@ -156,12 +156,45 @@ public class WarehouseServer{
         employeeApps.remove(employeeID);
     }
 
-    public void updateEmployee(Map<String, String> kwargs){
-        StringBuilder cols = new StringBuilder();
+    public void updateEmployee(int employeeID, Map<String, String> kwargs){
+        StringBuilder query = new StringBuilder("UPDATE \"WH_Employees\"\n" +
+                "SET ");
         for(String arg : kwargs.keySet()){
-            cols.append(kwargs.get(arg)).append(',');
+            query.append("\"").append(arg).append("\" = ").append(kwargs.get(arg)).append(",");
         }
-        String columns = cols.toString().stripTrailing();
+        String sql = query.toString().substring(0, query.lastIndexOf(",")) + "WHERE \"Employee_id\" = " + employeeID;
+        connector.query(sql);
     }
 
+    public void updateShop(int shopID, Map<String, String> kwargs){
+        StringBuilder query = new StringBuilder("UPDATE \"WH_Shops\"\n" +
+                "SET ");
+        for(String arg : kwargs.keySet()){
+            query.append("\"").append(arg).append("\" = ").append(kwargs.get(arg)).append(",");
+        }
+        String sql = query.toString().substring(0, query.lastIndexOf(",")) + "WHERE \"Shop_id\" = " + shopID;
+        connector.query(sql);
+    }
+
+    public void updateProduct(int productID, Map<String, String> kwargs){
+        StringBuilder query = new StringBuilder("UPDATE \"WH_Products\"\n" +
+                "SET ");
+        for(String arg : kwargs.keySet()){
+            query.append("\"").append(arg).append("\" = ").append(kwargs.get(arg)).append(",");
+        }
+        String sql = query.toString().substring(0, query.lastIndexOf(",")) + "WHERE \"Product_id\" = " + productID;
+        connector.query(sql);
+    }
+
+    public void addProduct(String name, int count){
+        int productID = Integer.parseInt(connector.fetch("SELECT MAX(\"Product_id\") FROM \"WH_Product\"")
+                .get(0).get("MAX(\"PRODUCT_ID\")")) + 1;
+        connector.query(String.format("INSERT INTO \"WH_Products\"\n" +
+                "VALUES (%d, %s, %d)", productID, name, count));
+    }
+
+    public void removeProduct(int productID){
+        connector.query(String.format("DELETE FROM \"WH_Products\"\n" +
+                "    WHERE \"Product_id\" = %d", productID));
+    }
 }

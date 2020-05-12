@@ -7,11 +7,11 @@ import java.util.Map;
 
 public class DataBaseConnector {
     private String driverString = "jdbc:oracle:thin:@";
-    private String host = "156.17.43.90";
+    private String host = "localhost";//"156.17.43.90";
     private String port = "1521";
     private String serviceName = "xe";
-    private String user = "pwr_19_20_L_018248844";
-    private String password = "248844";
+    private String user = "Nyatan";//"pwr_19_20_L_018248844";
+    private String password = "dupadupa";
 
     private Connection connection;
 
