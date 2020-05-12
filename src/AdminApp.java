@@ -1,6 +1,12 @@
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminApp {
-        WarehouseServer server = new WarehouseServer();
+        WarehouseServer server;
+
+        public AdminApp(WarehouseServer server){
+            this.server = server;
+        }
 
         public void addEmployee(String firstName, String lastName, double salary){
             server.addEmployee(firstName, lastName, salary);
@@ -9,81 +15,52 @@ public class AdminApp {
             server.removeEmployee(employeeID);
         }
 
-        public void changeEmployeeFirstName(int ID, String name){
-            server.changeEmployeeFirstName(ID, name);
-        }
-
-        public void changeEmployeeLastName(int ID, String lastName){
-            server.chamgeEmployeeLastName(ID, lastName);
-        }
-
-        public void changeEmployeeSalary(int ID, double salary){
-            server.changeEmployeeSalary(ID, salary);
-        }
-
-        public void updateEmployee(int ID, String firstName, String lastName, double salary){
-            server.changeEmployeeSalary(ID, salary);
-            server.chamgeEmployeeLastName(ID, lastName);
-            server.chamgeEmployeeLastName(ID, lastName);
+        public void updateEmployee(int ID, Map<String, String> args){
+            /*Map<String, String> args = new HashMap<>();
+            args.put("Employee_id", Integer.toString(ID));
+            args.put("First_name", String.format("'%s'", firstName));
+            args.put("Last_name", String.format("'%s'", lastName));
+            args.put("Salary", Double.toString(salary));*/
+            server.updateEmployee(ID, args);
         }
 
         public void addProduct(String name, int amount){
             server.addProduct(name, amount);
         }
 
-        public void changeProductName(int ID, String name){
-            server.changeProductName(ID, name);
+        public void updateProduct(String name, Map<String, String> args){
+//            Map<String, String> args = new HashMap<>();
+//            args.put("Count", Integer.toString(count));
+//            args.put("Name", String.format("'%s'", newName));
+            server.updateProduct(name, args);
         }
-        public void changeProductName(String oldName, String newName){
-            server.changeProductName(oldName, newName);
-        }
-
-        public void changeProductCount(int ID, int count){
-            server.changeProductCount(ID, count);
-        }
-        public void changeProductCount(String name, int count){
-           server.changeProductCount(name, count);
-        }
-        public void updateProduct(String oldName, String newName, int count){
-            this.changeProductName(oldName, newName);
-            this.changeProductCount(oldName,count);
-        }
-        public void updateProduct(int ID, String name, int count){
-            this.changeProductName(ID, name);
-            this.changeProductCount(ID,count);
+        public void updateProduct(int ID, Map<String, String> args){
+//            Map<String, String> args = new HashMap<>();
+//            args.put("Count", Integer.toString(count));
+//            args.put("Name", String.format("'%s'", name));
+            server.updateProduct(ID, args);
         }
 
         public void addShop(String name, String address){
             server.addShop(name, address);
         }
 
-        public void changeShopName(int ID, String name){
-            server.changeShopName(ID, name);
+        public void updateShop(int ID, Map<String, String> args){
+            server.updateShop(ID, args);
         }
-        public void changeShopName(String oldName, String newName){
-            server.changeShopName(oldName, newName);
-        }
-
-        public void changeShopAddress(int ID, String address){
-            server.changeShopAdress(ID, address);
-        }
-        public void changeShopAddress(String namme, String address){
-            server.changeShopAdress(name, address);
-        }
-        public void updateShop(int ID, String name, String address){
-            this.changeShopAddress(ID, address);
-            this.changeShopName(ID, name);
-        }
-        public void updateShop(String oldName, String newName, String address){
-            this.changeShopAddress(oldName, address);
-            this.changeShopName(oldName, newName);
+        public void updateShop(String name, Map<String, String> args){
+            server.updateShop(name, args);
         }
 
         public void cancelOrder(int ID){
-            server.deleteOrder(ID);
+            server.cancelOrder(ID);
         }
 
-        public
+        public void removeProduct(int ID){
+            server.removeProduct(ID);
+        }
 
-
+        public void removeShop(int ID){
+            server.removeShop(ID);
+        }
 }

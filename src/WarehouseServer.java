@@ -119,16 +119,45 @@ public class WarehouseServer{
     }
 
     public List<Map<String, String>> searchProductName(String name){
-        return connector.fetch(String.format("SELECT * FROM \"WH_Products\" WHERE \"Name\" LIKE \"%s%\"", name));
+        return connector.fetch(String.format("SELECT * FROM \"WH_Products\" WHERE \"Name\" LIKE '%s%'", name));
     }
 
     public List<Map<String, String>> searchProductID(String id){
-        return connector.fetch(String.format("SELECT * FROM \"WH_Products\" WHERE \"Product_id\" LIKE \"%s%\"", id));
+        return connector.fetch(String.format("SELECT * FROM \"WH_Products\" WHERE \"Product_id\" LIKE '%s%'", id));
+    }
+
+    public List<Map<String, String>> searchEmployeeID(String id){
+        return connector.fetch(String.format("SELECT * FROM \"WH_Employees\" WHERE \"Employee_id\" LIKE '%s%'", id));
+    }
+
+    public List<Map<String, String>> searchEmployeeName(String firstName, String lastName){
+        return connector.fetch(String.format("SELECT * FROM \"WH_Employees\" WHERE \"First_name\" LIKE '%s%' AND " +
+                "\"Last_name\" LIKE '%s%'", firstName, lastName));
+    }
+
+    public List<Map<String, String>> searchOrderID(String id){
+        return connector.fetch(String.format("SELECT * FROM \"WH_Orders\" WHERE \"Order_id\" = '%s'", id));
+    }
+
+    public List<Map<String, String>> searchOrderShopID(String id){
+        return connector.fetch(String.format("SELECT * FROM \"WH_Orders\" WHERE \"Shop_id\" = '%s'", id));
+    }
+
+    public List<Map<String, String>> searchOrderShopName(String name){
+        return connector.fetch(String.format("SELECT * FROM \"WH_Orders\"\n" +
+                "JOIN \"WH_Shops\" ON \"WH_Orders\".\"Shop_id\" = \"WH_Shops\".\"Shop_id\"\n" +
+                "WHERE \"WH_Shops\".\"Name\" = '%s'", name));
+    }
+
+    public String getOrderStatus(int orderID){
+        return connector.fetch(String.format("SELECT \"Status\" FROM \"WH_Orders\" WHERE \"Order_id\" = '%s'", orderID)).
+                get(0).get("STATUS");
     }
 
     public void cancelOrder(int orderID){
         changeOrderStatus("Canceled", orderID);
-        int employeeID = Integer.parseInt(connector.fetch(String.format("SELECT \"Employee_id\" FROM \"WH_Orders\" WHERE \"Order_id\" = %d", orderID)).get(0).get("EMPLOYEE_ID"));
+        int employeeID = Integer.parseInt(connector.fetch(String.format(
+                "SELECT \"Employee_id\" FROM \"WH_Orders\" WHERE \"Order_id\" = %d", orderID)).get(0).get("EMPLOYEE_ID"));
         employeeApps.get(employeeID).is_working = false;
         employeeApps.get(employeeID).current_order_id = 0;
     }
@@ -176,6 +205,16 @@ public class WarehouseServer{
         connector.query(sql);
     }
 
+    public void updateShop(String name, Map<String, String> kwargs){
+        StringBuilder query = new StringBuilder("UPDATE \"WH_Shops\"\n" +
+                "SET ");
+        for(String arg : kwargs.keySet()){
+            query.append("\"").append(arg).append("\" = ").append(kwargs.get(arg)).append(",");
+        }
+        String sql = query.toString().substring(0, query.lastIndexOf(",")) + "WHERE \"Name\" = " + name;
+        connector.query(sql);
+    }
+
     public void updateProduct(int productID, Map<String, String> kwargs){
         StringBuilder query = new StringBuilder("UPDATE \"WH_Products\"\n" +
                 "SET ");
@@ -185,6 +224,17 @@ public class WarehouseServer{
         String sql = query.toString().substring(0, query.lastIndexOf(",")) + "WHERE \"Product_id\" = " + productID;
         connector.query(sql);
     }
+
+    public void updateProduct(String name, Map<String, String> kwargs){
+        StringBuilder query = new StringBuilder("UPDATE \"WH_Products\"\n" +
+                "SET ");
+        for(String arg : kwargs.keySet()){
+            query.append("\"").append(arg).append("\" = ").append(kwargs.get(arg)).append(",");
+        }
+        String sql = query.toString().substring(0, query.lastIndexOf(",")) + "WHERE \"Name\" = '" + name + "'";
+        connector.query(sql);
+    }
+
 
     public void addProduct(String name, int count){
         int productID = Integer.parseInt(connector.fetch("SELECT MAX(\"Product_id\") FROM \"WH_Product\"")
