@@ -1,7 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class EmployeeApp {
     public int current_order_id;
     public int employee_id;
     public boolean is_working = false;
+    public List<Map<String,String>> orderProducts;
     public WarehouseServer server;
 
     public EmployeeApp(WarehouseServer server, int employee_id){
@@ -14,11 +19,13 @@ public class EmployeeApp {
         server.employeeCompleteOrder(this);
         is_working = false;
         current_order_id = 0;
+        orderProducts = new ArrayList<>();
     }
 
     public void getOrder(int id){
         this.current_order_id = id;
         is_working = true;
+        orderProducts = server.getProductsByOrder(id);
     }
 
     public String toString(){
