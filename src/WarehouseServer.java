@@ -2,12 +2,12 @@ import java.util.*;
 
 public class WarehouseServer{
     public DataBaseConnector connector;
-    public List<EmployeeApp> employeeApps;
+    public Map<Integer, EmployeeApp> employeeApps;
     public List<EmployeeApp> workQueue;
 
     public WarehouseServer(){
         connector = new DataBaseConnector();
-        employeeApps = new ArrayList<>();
+        employeeApps = new HashMap<>();
         workQueue = new ArrayList<>();
     }
 
@@ -33,7 +33,7 @@ public class WarehouseServer{
     }
 
     public void enlist(EmployeeApp employeeApp) {
-        employeeApps.add(employeeApp);
+        employeeApps.put(employeeApp.employee_id, employeeApp);
         workQueue.add(employeeApp);
     }
 
@@ -135,6 +135,33 @@ public class WarehouseServer{
 
     public List<Map<String, String>> getProductsByOrder(int id) {
         return connector.fetch(String.format("SELECT \"Product_id\", \"Count\" FROM \"WH_Ordered_products\" WHERE \"Order_id\" = %d", id));
+    }
+
+    public void addShop(String name, String address){
+        int shopID = Integer.parseInt(connector.fetch("SELECT MAX(\"Shop_id\") FROM \"WH_Shops\"")
+                .get(0).get("MAX(\"SHOP_ID\")")) + 1;
+        connector.query(String.format("INSERT INTO \"WH_Shops\"\n" +
+                "VALUES (%d, %s, %s)", shopID, name, address));
+    }
+
+    public void removeShop(int shopID){
+        connector.query(String.format("DELETE FROM \"WH_Shops\"\n" +
+                "    WHERE \"Shop_id\" = %d", shopID));
+    }
+
+    public void removeEmployee(int employeeID){
+        connector.query(String.format("DELETE FROM \"WH_Employees\"\n" +
+                "    WHERE \"Employee_id\" = %d", employeeID));
+        if(employeeApps.get(employeeID).is_working) changeOrderStatus("Waiting", employeeApps.get(employeeID).current_order_id);
+        employeeApps.remove(employeeID);
+    }
+
+    public void updateEmployee(Map<String, String> kwargs){
+        StringBuilder cols = new StringBuilder();
+        for(String arg : kwargs.keySet()){
+            cols.append(kwargs.get(arg)).append(',');
+        }
+        String columns = cols.toString().stripTrailing();
     }
 
 }

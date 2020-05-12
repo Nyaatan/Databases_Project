@@ -6,7 +6,7 @@ public class AdminApp {
             server.addEmployee(firstName, lastName, salary);
         }
         public void deleteEmployee(int employeeID){
-            server.deleteEmployee(employeeID);
+            server.removeEmployee(employeeID);
         }
 
         public void changeEmployeeFirstName(int ID, String name){
