@@ -11,6 +11,7 @@ public class App extends JFrame implements ActionListener {
     private JMenu shopOrdersMenu;
     private JMenu managerOrdersMenu;
     private JMenu managerEmployeesMenu;
+    private JMenu managerShopsMenu;
     private JMenu shopModeMenu;
     private JMenu employeeModeMenu;
     private JMenu managerModeMenu;
@@ -23,9 +24,13 @@ public class App extends JFrame implements ActionListener {
     private JMenuItem employeeToManagerMode;
     private JMenuItem managerToShopMode;
     private JMenuItem managerToEmployeeMode;
+    private JMenuItem managerEmployeeListMenu;
+    private JMenuItem managerShopListMenu;
     private JPanel shopOrderListPanel;
     private JPanel shopNewOrderPanel;
     private JPanel managerOrderListPanel;
+    private JPanel managerEmployeeListPanel;
+    private JPanel managerShopListPanel;
     private JPanel employeePanel;
 
     private EmployeeApp employee;
@@ -51,6 +56,10 @@ public class App extends JFrame implements ActionListener {
         this.employeePanel.add(new JLabel("Obsługiwane zamówienie"));
         this.managerOrderListPanel = new JPanel();
         this.managerOrderListPanel.add(new JLabel("Lista zamówień"));
+        this.managerEmployeeListPanel = new JPanel();
+        this.managerEmployeeListPanel.add(new JLabel("Lista pracowników"));
+        this.managerShopListPanel = new JPanel();
+        this.managerShopListPanel.add(new JLabel("Lista sklepów"));
 
         this.shopId = 0;
         this.employee = null;
@@ -131,6 +140,7 @@ public class App extends JFrame implements ActionListener {
         this.shopOrdersMenu = new JMenu(orders);
         this.managerOrdersMenu = new JMenu(orders);
         this.managerEmployeesMenu = new JMenu(employee);
+        this.managerShopsMenu = new JMenu(shop);
 
 
         this.shopToEmployeeMode = new JMenuItem(employee);
@@ -146,6 +156,9 @@ public class App extends JFrame implements ActionListener {
         this.shopOrderListMenu = new JMenuItem(orderList);
         this.managerOrderListMenu = new JMenuItem(orderList);
 
+        this.managerShopListMenu = new JMenuItem("Lista sklepów");
+        this.managerEmployeeListMenu = new JMenuItem("Lista pracowników");
+
         this.shopToEmployeeMode.addActionListener(this);
         this.shopToManagerMode.addActionListener(this);
         this.employeeToShopMode.addActionListener(this);
@@ -155,6 +168,8 @@ public class App extends JFrame implements ActionListener {
         this.shopNewOrderMenu.addActionListener(this);
         this.shopOrderListMenu.addActionListener(this);
         this.managerOrderListMenu.addActionListener(this);
+        this.managerShopListMenu.addActionListener(this);
+        this.managerEmployeeListMenu.addActionListener(this);
 
         this.shopModeMenu.add(this.shopToEmployeeMode);
         this.shopModeMenu.add(this.shopToManagerMode);
@@ -167,10 +182,16 @@ public class App extends JFrame implements ActionListener {
 
         this.shopOrdersMenu.add(this.shopNewOrderMenu);
         this.shopOrdersMenu.add(this.shopOrderListMenu);
+
         this.managerOrdersMenu.add(this.managerOrderListMenu);
+        this.managerEmployeesMenu.add(this.managerEmployeeListMenu);
+        this.managerShopsMenu.add(this.managerShopListMenu);
 
         this.shopMenuBar.add(this.shopOrdersMenu);
+
         this.managerMenuBar.add(this.managerOrdersMenu);
+        this.managerMenuBar.add(this.managerEmployeesMenu);
+        this.managerMenuBar.add(this.managerShopsMenu);
 
         this.shopMenuBar.add(this.shopModeMenu);
         this.employeeMenuBar.add(this.employeeModeMenu);
@@ -201,6 +222,8 @@ public class App extends JFrame implements ActionListener {
         if(source == this.shopNewOrderMenu) this.displayShopNewOrder();
         if(source == this.shopOrderListMenu) this.displayShopOrderList();
         if(source == this.managerOrderListMenu) this.displayManagerOrderList();
+        if(source == this.managerShopListMenu) this.displayManagerShopList();
+        if(source == this.managerEmployeeListMenu) this.displayManagerEmployeeList();
 
 
     }
@@ -225,6 +248,18 @@ public class App extends JFrame implements ActionListener {
 
     private void displayManagerOrderList() {
         this.setContentPane(this.managerOrderListPanel);
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void displayManagerShopList() {
+        this.setContentPane(this.managerShopListPanel);
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void displayManagerEmployeeList() {
+        this.setContentPane(this.managerEmployeeListPanel);
         this.revalidate();
         this.repaint();
     }
