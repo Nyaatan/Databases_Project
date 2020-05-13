@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AdminApp {
@@ -62,5 +64,29 @@ public class AdminApp {
 
         public void removeShop(int ID){
             server.removeShop(ID);
+        }
+
+        public List<Map<String, String>> getEmployees(){
+            return server.getEmployees();
+        }
+
+        public List<Map<String, String>> getProducts(){
+            return server.getProducts();
+        }
+
+        public List<Map<String, String>> getShops(){
+            return server.getShops();
+        }
+
+        public List<Map<String, String>> getOrders(){
+            List<Map<String, String>> orders = server.getOrders();
+            for(Map<String, String> order : orders){
+                List<Product> products = new ArrayList<>();
+                List<Map<String, String>> productsRaw = server.getProductsByOrder(Integer.parseInt(order.get("Order_id")));
+                for(Map<String, String> product : productsRaw) products.add(new Product(Integer.parseInt(product.get("Product_id"))
+                        , Integer.parseInt(product.get("Count"))));
+                order.put("Products", products.toString());
+            }
+            return orders;
         }
 }
