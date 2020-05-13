@@ -17,7 +17,6 @@ public class EmployeeApp {
 
     public void completeOrder(){
         is_working = false;
-        current_order_id = 0;
         orderProducts = new ArrayList<>();
         server.employeeCompleteOrder(this);
     }
