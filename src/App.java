@@ -45,6 +45,8 @@ public class App extends JFrame implements ActionListener {
     private ShopApp shop;
     private AdminApp admin;
     private WarehouseServer server;
+    private DefaultTableModel shopOrdersTableModel;
+    private JTable shopOrdersTable;
 
     public static void main(String[] args) {
         new App();
@@ -58,13 +60,20 @@ public class App extends JFrame implements ActionListener {
         this.createMenus();
 
         this.shopOrderListPanel = new JPanel();
-        this.shopOrderListPanel.add(new JLabel("Lista zamówień"));
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("Order_id");
+        columnNames.add("Products");
+        columnNames.add("Status");
+        this.shopOrdersTableModel = new DefaultTableModel(columnNames, 0);
+        this.shopOrdersTable = new JTable(shopOrdersTableModel);
+        this.shopOrderListPanel.add(shopOrdersTable);
+
         this.shopNewOrderPanel = new JPanel();
         this.shopNewOrderPanel.add(new JLabel("Nowe zamówienie"));
         this.employeePanel = new JPanel();
         this.employeePanelLabel = new JLabel("Obsługiwane zamówienie: Brak");
         this.employeePanel.add(employeePanelLabel);
-        Vector<String> columnNames = new Vector<>();
+        columnNames = new Vector<>();
         columnNames.add("Product_id");
         columnNames.add("Count");
         this.tableModel = new DefaultTableModel(columnNames, 0);
@@ -76,6 +85,7 @@ public class App extends JFrame implements ActionListener {
             this.server.assignOrders();
             displayEmployee();
         });
+
         this.employeePanel.add(this.employeeCompleteButton);
         this.adminOrderListPanel = new JPanel();
         this.adminOrderListPanel.add(new JLabel("Lista zamówień"));
@@ -311,6 +321,23 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void displayShopOrderList() {
+        while(shopOrdersTableModel.getRowCount() > 0) {
+            shopOrdersTableModel.removeRow(0);
+        }
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("Order_id");
+        columnNames.add("Products");
+        columnNames.add("Status");
+        this.shopOrdersTableModel.addRow(columnNames);
+        Map<Integer, List<Product>> orders = this.shop.getOrdersDetails();
+        for(Integer order : orders.keySet()){
+            Vector<String> row = new Vector<>();
+            row.add(order.toString());
+            row.add(orders.get(order).toString());
+            row.add(this.shop.getOrderStatus(order));
+            shopOrdersTableModel.addRow(row);
+        }
+
         this.setContentPane(this.shopOrderListPanel);
         this.revalidate();
         this.repaint();

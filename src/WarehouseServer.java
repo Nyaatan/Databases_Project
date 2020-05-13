@@ -147,7 +147,7 @@ public class WarehouseServer{
 
     public String getOrderStatus(int orderID){
         return connector.fetch(String.format("SELECT \"Status\" FROM \"WH_Orders\" WHERE \"Order_id\" = '%s'", orderID)).
-                get(0).get("STATUS");
+                get(0).get("Status");
     }
 
     public void cancelOrder(int orderID){
@@ -159,7 +159,10 @@ public class WarehouseServer{
     }
 
     public List<Map<String, String>> getProductsByOrder(int id) {
-        return connector.fetch(String.format("SELECT \"Product_id\", \"Count\" FROM \"WH_Ordered_products\" WHERE \"Order_id\" = %d", id));
+        return connector.fetch(String.format("SELECT \"WH_Products\".\"Product_id\", \"WH_Ordered_products\".\"Count\", \"Name\" FROM \"WH_Ordered_products\"\n" +
+                "    JOIN \"WH_Products\"\n" +
+                "        ON \"WH_Ordered_products\".\"Product_id\" = \"WH_Products\".\"Product_id\"\n" +
+                "WHERE \"Order_id\" = %d", id));
     }
 
     public void addShop(String name, String address){
@@ -247,5 +250,9 @@ public class WarehouseServer{
     public EmployeeApp checkin(Integer integer) {
         if(employeeApps.keySet().contains(integer)) return employeeApps.get(integer);
         else return new EmployeeApp(this, integer);
+    }
+
+    public List<Map<String, String>> getOrdersShopID(int shopID){
+        return connector.fetch(String.format("SELECT \"Order_id\" FROM \"WH_Orders\" WHERE \"Shop_id\" = %d", shopID));
     }
 }
