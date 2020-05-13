@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShopApp {
 
@@ -41,5 +38,14 @@ public class ShopApp {
             ordersExtended.put(orderID, products);
         }
         return ordersExtended;
+    }
+
+    public static String[] getShopNames(WarehouseServer server){
+        List<String> shopNames = new ArrayList<>();
+        List<Map<String, String>> shops = server.getShops();
+        for(Map<String, String> shop : shops){
+            shopNames.add(shop.get("Name"));
+        }
+        return (String[]) shopNames.toArray();
     }
 }
