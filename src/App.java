@@ -1,5 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -83,14 +86,25 @@ public class App extends JFrame implements ActionListener {
 
     private void runShopMode() {
         if(this.shop == null) {
-            String[] choices = { "Nazwa Firmy 1", "Nazwa Firmy 2", "Nazwa Firmy 3" };
+            List<String> choices = new ArrayList<String>();
+            List<Integer> ids = new ArrayList<Integer>();
+
+            List<Map<String, String>> shops = this.admin.getShops();
+
+            for(int i = 0; i < shops.size(); i++) {
+                choices.add(shops.get(i).get("Name"));
+                ids.add(Integer.parseInt(shops.get(i).get("Shop_id")));
+            }
+            String[] ch_array = new String[choices.size()];
+            choices.toArray(ch_array);
+
             String input = (String) JOptionPane.showInputDialog(this, "Wybierz swoją firmę:",
                     "Wybór sklepu", JOptionPane.QUESTION_MESSAGE, null,
-                    choices,
-                    choices[0]);
+                    ch_array,
+                    ch_array[0]);
 
-            for(int i = 0; i < choices.length; i++) {
-                if(choices[i] == input) this.shop = new ShopApp(this.server, 1);
+            for(int i = 0; i < choices.size(); i++) {
+                if(choices.get(i) == input) this.shop = new ShopApp(this.server, ids.get(i));
             }
         }
         this.setTitle("Obsługa sklepu");
