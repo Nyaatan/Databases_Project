@@ -201,6 +201,11 @@ public class App extends JFrame implements ActionListener {
         columnNames.add("Status");
         this.adminOrdersTableModel = new DefaultTableModel(columnNames, 0);
         this.adminOrdersTable = new JTable(adminOrdersTableModel);
+        this.adminOrdersTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+        this.adminOrdersTable.getColumnModel().getColumn(1).setPreferredWidth(20);
+        this.adminOrdersTable.getColumnModel().getColumn(2).setPreferredWidth(180);
+        this.adminOrdersTable.getColumnModel().getColumn(0).setPreferredWidth(180);
+        this.adminOrderListPanel.add(new JLabel("Lista zamówień"));
         this.adminOrderListPanel.add(adminOrdersTable);
 
 
