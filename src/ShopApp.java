@@ -10,6 +10,11 @@ public class ShopApp {
     public ShopApp(WarehouseServer server, int shop_id){
         this.server = server;
         this.shop_id = shop_id;
+        loadOrders(server.getOrdersShopID(this.shop_id));
+    }
+
+    private void loadOrders(List<Map<String, String>> ordersShopID) {
+        for(Map<String, String> order : ordersShopID) orders.add(Integer.parseInt(order.get("Order_id")));
     }
 
     public void makeOrder(List<List<Integer>> productsList){
@@ -33,7 +38,7 @@ public class ShopApp {
             List<Map<String, String>> productsRaw = server.getProductsByOrder(orderID);
             for (Map<String, String> product : productsRaw) {
                 products.add(new Product(Integer.parseInt(product.get("Product_id"))
-                        , Integer.parseInt(product.get("Count"))));
+                        , Integer.parseInt(product.get("Count")), product.get("Name")));
             }
             ordersExtended.put(orderID, products);
         }
