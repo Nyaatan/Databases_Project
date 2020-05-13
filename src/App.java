@@ -107,7 +107,7 @@ public class App extends JFrame implements ActionListener {
                 if(choices.get(i) == input) this.shop = new ShopApp(this.server, ids.get(i));
             }
         }
-        this.setTitle("Obsługa sklepu");
+        this.setTitle("Obsługa sklepu id: " + Integer.toString(this.shop.shop_id));
         this.setJMenuBar(this.shopMenuBar);
         this.displayShopNewOrder();
         this.setVisible(true);
