@@ -10,8 +10,8 @@ public class DataBaseConnector {
     private String host = "156.17.43.90";
     private String port = "1521";
     private String serviceName = "xe";
-    private String user = "pwr_19_20_L_018248844";
-    private String password = "248844";
+    private String user = "pwr_19_20_L_017241342";
+    private String password = "pwr284630";
 
     private Connection connection;
 

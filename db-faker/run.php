@@ -29,28 +29,28 @@ function display($string){
 // pracownicy
 for($i = 0; $i < $emp_count; $i++){
     $morf = $faker->randomElement(['male', 'female']);
-    display('INSERT INTO "Employees" ("Employee_id", "First_name", "Last_name", "Salary")');
+    display('INSERT INTO "WH_Employees" ("Employee_id", "First_name", "Last_name", "Salary")');
     display("VALUES (". ($i+1) .", '". $faker->firstName($morf) ."', '". $faker->lastName($morf) ."', ". $faker->numberBetween($salary_range[0], $salary_range[1]) * 1000 .");");
 }
 display('COMMIT;' . PHP_EOL);
 
 // sklepy
 for ($i = 0; $i < $shop_count; $i++){
-    display('INSERT INTO "Shops"');
+    display('INSERT INTO "WH_Shops"');
     display("VALUES (". ($i+1) .", '". $faker->address ."', '". $faker->company ."');");
 }
 display('COMMIT;' . PHP_EOL);
 
 // zamówienia
 for ($i = 0; $i < $order_count; $i++){
-    display('INSERT INTO "Orders"');
+    display('INSERT INTO "WH_Orders"');
     display("VALUES (". ($i+1) .", ". $faker->numberBetween(1, $shop_count) .", ". $faker->numberBetween(1, $emp_count) .", '". $faker->randomElement($order_status) ."');");
 }
 display('COMMIT;' . PHP_EOL);
 
 // Produkty
 for ($i = 0; $i < $prod_count; $i++){
-    display('INSERT INTO "Products"');
+    display('INSERT INTO "WH_Products"');
     display("VALUES (". ($i+1) .", '". $faker->ingredient ." ". $faker->numberBetween($prod_weight_range[0], $prod_weight_range[1])*100 ."g', ". $faker->numberBetween($prod_quantity_range[0], $prod_quantity_range[1]) .");");
 }
 display('COMMIT;' . PHP_EOL);
@@ -65,7 +65,7 @@ for ($i = 0; $i < $order_count; $i++){
             $product_id = $faker->numberBetween(1, $prod_count);
         }while(in_array($product_id, $used_ids));
         
-        display('INSERT INTO "Ordered_products"');
+        display('INSERT INTO "WH_Ordered_products"');
         display("VALUES (". $key .", ". ($i+1) .", ". $product_id .", ". $faker->numberBetween($prod_in_order_quantity_range[0], $prod_in_order_quantity_range[1])*10 .");");
         $used_ids[] = $product_id;
         $key++;

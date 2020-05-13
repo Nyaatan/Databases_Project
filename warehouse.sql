@@ -15,7 +15,7 @@ create table "WH_Employees"
     "Completed_orders" NUMBER default 0,
     "Salary"           NUMBER(6, 2) not null
 );
-
+/
 create table "WH_Shops"
 (
     "Shop_id" NUMBER       not null
@@ -24,7 +24,7 @@ create table "WH_Shops"
     "Address" VARCHAR2(64) not null,
     "Name"    VARCHAR2(64) not null
 );
-
+/
 create table "WH_Orders"
 (
     "Order_id"    NUMBER                         not null
@@ -41,7 +41,7 @@ create table "WH_Orders"
     "Status"      VARCHAR2(11) default 'Waiting' not null
         check ( "Status" IN ('Waiting', 'In progress', 'Completed', 'Cancelled') )
 );
-
+/
 create table "WH_Products"
 (
     "Product_id" NUMBER       not null
@@ -50,7 +50,7 @@ create table "WH_Products"
     "Name"       VARCHAR2(64) not null,
     "Count"      NUMBER       not null
 );
-
+/
 create table "WH_Ordered_products"
 (
     "WH_Ordered_product_id" NUMBER not null
@@ -66,7 +66,7 @@ create table "WH_Ordered_products"
                 on delete cascade,
     "Count"              NUMBER not null
 );
-
+/
 create table "WH_Logs"
 (
 	"Date" date not null,
@@ -75,12 +75,12 @@ create table "WH_Logs"
 	"Action" varchar(64) not null,
     "Row_id" NUMBER not null
 );
-
+/
 CREATE VIEW WH_OrderView AS
     SELECT s."Shop_id", s."Name" "Shop Name", COUNT( o."Shop_id") "WH_Orders"
 FROM "WH_Orders" o JOIN "WH_Shops" s ON o."Shop_id" = s."Shop_id"
 GROUP BY s."Shop_id", s."Name";
-
+/
 create or replace trigger employees_log
     after insert or update or delete on "WH_Employees"
     for each row
@@ -102,7 +102,7 @@ begin
     insert into "WH_Logs"
         values (SYSDATE,USER, 'Employees', action, row_id);
 end;
-
+/
 create or replace trigger orders_log
     after insert or update or delete on "WH_Orders"
     for each row
@@ -124,7 +124,7 @@ begin
     insert into "WH_Logs"
         values (SYSDATE,USER, 'Orders', action, row_id);
 end;
-
+/
 create or replace trigger shops_log
     after insert or update or delete on "WH_Shops"
     for each row
@@ -146,7 +146,7 @@ begin
     insert into "WH_Logs"
         values (SYSDATE,USER, 'Shops', action, row_id);
 end;
-
+/
 create or replace trigger products_log
     after insert or update or delete on "WH_Products"
     for each row
@@ -168,7 +168,7 @@ begin
     insert into "WH_Logs"
         values (SYSDATE,USER, 'Products', action, row_id);
 end;
-
+/
 create or replace trigger ordered_products_log
     after insert or update or delete on "WH_Ordered_products"
     for each row
@@ -190,4 +190,5 @@ begin
     insert into "WH_Logs"
         values (SYSDATE,USER, 'Ordered_products', action, row_id);
 end;
+/
 COMMIT;
