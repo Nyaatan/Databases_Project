@@ -40,12 +40,16 @@ public class ShopApp {
         return ordersExtended;
     }
 
-    public static String[] getShopNames(WarehouseServer server){
-        List<String> shopNames = new ArrayList<>();
+    public String getOrderStatus(int orderID){
+        return server.getOrderStatus(orderID);
+    }
+
+    public static Map<String, Integer> getShopNamesIDs(WarehouseServer server){
+        Map<String, Integer>  shopNamesIDs = new HashMap<>();
         List<Map<String, String>> shops = server.getShops();
         for(Map<String, String> shop : shops){
-            shopNames.add(shop.get("Name"));
+            shopNamesIDs.put(shop.get("Name"), Integer.parseInt(shop.get("Shop_id")));
         }
-        return (String[]) shopNames.toArray();
+        return shopNamesIDs;
     }
 }
