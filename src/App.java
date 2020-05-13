@@ -3,8 +3,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class App extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -36,8 +38,8 @@ public class App extends JFrame implements ActionListener {
     private JPanel adminShopListPanel;
     private JPanel employeePanel;
     private JLabel employeePanelLabel;
-    private JList employeePanelProductList;
-    private DefaultListModel employeePanelListModel;
+    private JTable employeePanelProductList;
+    private DefaultTableModel tableModel;
     private JButton employeeCompleteButton;
     private EmployeeApp employee;
     private ShopApp shop;
@@ -62,8 +64,11 @@ public class App extends JFrame implements ActionListener {
         this.employeePanel = new JPanel();
         this.employeePanelLabel = new JLabel("Obsługiwane zamówienie: Brak");
         this.employeePanel.add(employeePanelLabel);
-        this.employeePanelListModel = new DefaultListModel();
-        this.employeePanelProductList = new JList(this.employeePanelListModel);
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("Product_id");
+        columnNames.add("Count");
+        this.tableModel = new DefaultTableModel(columnNames, 0);
+        this.employeePanelProductList = new JTable(tableModel);
         this.employeePanel.add(this.employeePanelProductList);
         this.employeeCompleteButton = new JButton("Zamówienie gotowe");
         employeeCompleteButton.addActionListener(e -> {
@@ -270,12 +275,25 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void displayEmployee() {
-        this.employeePanelListModel.clear();
-        if(this.employee.current_order_id > 0) {
+        while(tableModel.getRowCount() > 0) {
+            tableModel.removeRow(0);
+        }
+
+        if(this.employee.is_working) {
             this.employeePanelLabel.setText(String.format(
                     "Obsługiwane zamówienie: %d", this.employee.current_order_id));
+
+            Vector<String> columnNames = new Vector<>();
+            columnNames.add("Product_id");
+            columnNames.add("Count");
+            this.tableModel.addRow(columnNames);
+
             for(Map<String, String> product : this.employee.orderProducts){
-                this.employeePanelListModel.addElement(String.format("[ID] %s: %s", product.get("Product_id"), product.get("Count")));
+                //this.employeePanelListModel.addElement(String.format("[ID] %s: %s", product.get("Product_id"), product.get("Count")));
+                Vector<String> row = new Vector<>();
+                row.add(product.get("Product_id"));
+                row.add(product.get("Count"));
+                this.tableModel.addRow(row);
             }
         }
         else{
