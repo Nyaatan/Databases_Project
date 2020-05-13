@@ -34,7 +34,7 @@ public class App extends JFrame implements ActionListener {
     private JPanel employeePanel;
 
     private EmployeeApp employee;
-    private int shopId;
+    private ShopApp shop;
     private WarehouseServer server;
 
     public static void main(String[] args) {
@@ -61,7 +61,7 @@ public class App extends JFrame implements ActionListener {
         this.managerShopListPanel = new JPanel();
         this.managerShopListPanel.add(new JLabel("Lista sklepów"));
 
-        this.shopId = 0;
+        this.shop = null;
         this.employee = null;
         this.server = new WarehouseServer();
 
@@ -80,7 +80,7 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void runShopMode() {
-        if(this.shopId < 1) {
+        if(this.shop != null) {
             String[] choices = { "Nazwa Firmy 1", "Nazwa Firmy 2", "Nazwa Firmy 3" };
             String input = (String) JOptionPane.showInputDialog(this, "Wybierz swoją firmę:",
                     "Wybór sklepu", JOptionPane.QUESTION_MESSAGE, null,
@@ -88,7 +88,7 @@ public class App extends JFrame implements ActionListener {
                     choices[0]);
 
             for(int i = 0; i < choices.length; i++) {
-                if(choices[i] == input) this.shopId = i+1;
+                if(choices[i] == input) this.shop = new ShopApp(this.server, 1);
             }
         }
         this.setTitle("Obsługa sklepu");
@@ -207,12 +207,12 @@ public class App extends JFrame implements ActionListener {
         }
         if(source == this.shopToManagerMode) this.runManagerMode();
         if(source == this.employeeToShopMode) {
-            this.shopId = 0;
+            this.shop = null;
             this.runShopMode();
         }
         if(source == this.employeeToManagerMode) this.runManagerMode();
         if(source == this.managerToShopMode) {
-            this.shopId = 0;
+            this.shop = null;
             this.runShopMode();
         }
         if(source == this.managerToEmployeeMode) {
