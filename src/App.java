@@ -35,7 +35,10 @@ public class App extends JFrame implements ActionListener {
     private JPanel adminEmployeeListPanel;
     private JPanel adminShopListPanel;
     private JPanel employeePanel;
-
+    private JLabel employeePanelLabel;
+    private JList employeePanelProductList;
+    private DefaultListModel employeePanelListModel;
+    private JButton employeeCompleteButton;
     private EmployeeApp employee;
     private ShopApp shop;
     private AdminApp admin;
@@ -57,7 +60,18 @@ public class App extends JFrame implements ActionListener {
         this.shopNewOrderPanel = new JPanel();
         this.shopNewOrderPanel.add(new JLabel("Nowe zamówienie"));
         this.employeePanel = new JPanel();
-        this.employeePanel.add(new JLabel("Obsługiwane zamówienie"));
+        this.employeePanelLabel = new JLabel("Obsługiwane zamówienie: Brak");
+        this.employeePanel.add(employeePanelLabel);
+        this.employeePanelListModel = new DefaultListModel();
+        this.employeePanelProductList = new JList(this.employeePanelListModel);
+        this.employeePanel.add(this.employeePanelProductList);
+        this.employeeCompleteButton = new JButton("Zamówienie gotowe");
+        employeeCompleteButton.addActionListener(e -> {
+            if(this.employee.is_working) this.employee.completeOrder();
+            this.server.assignOrders();
+            displayEmployee();
+        });
+        this.employeePanel.add(this.employeeCompleteButton);
         this.adminOrderListPanel = new JPanel();
         this.adminOrderListPanel.add(new JLabel("Lista zamówień"));
         this.adminEmployeeListPanel = new JPanel();
@@ -133,7 +147,7 @@ public class App extends JFrame implements ActionListener {
                     ch_array[0]);
 
             for(int i = 0; i < choices.size(); i++) {
-                if(choices.get(i) == input) this.employee = new EmployeeApp(this.server, ids.get(i));
+                if(choices.get(i) == input) this.employee = server.checkin(ids.get(i));
             }
         }
         setTitle("Obsługa pracownika id: " + Integer.toString(this.employee.employee_id));
@@ -256,6 +270,17 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void displayEmployee() {
+        this.employeePanelListModel.clear();
+        if(this.employee.current_order_id > 0) {
+            this.employeePanelLabel.setText(String.format(
+                    "Obsługiwane zamówienie: %d", this.employee.current_order_id));
+            for(Map<String, String> product : this.employee.orderProducts){
+                this.employeePanelListModel.addElement(String.format("[ID] %s: %s", product.get("Product_id"), product.get("Count")));
+            }
+        }
+        else{
+            this.employeePanelLabel.setText("Obsługiwane zamówienie: Brak");
+        }
         this.setContentPane(this.employeePanel);
         this.revalidate();
         this.repaint();

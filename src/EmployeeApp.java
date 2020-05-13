@@ -16,10 +16,10 @@ public class EmployeeApp {
     }
 
     public void completeOrder(){
-        server.employeeCompleteOrder(this);
         is_working = false;
         current_order_id = 0;
         orderProducts = new ArrayList<>();
+        server.employeeCompleteOrder(this);
     }
 
     public void getOrder(int id){

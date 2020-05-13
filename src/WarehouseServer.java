@@ -30,12 +30,14 @@ public class WarehouseServer{
                 "    SET \"Completed_orders\" = (SELECT \"Completed_orders\" FROM \"WH_Employees\"\n" +
                 "    WHERE \"Employee_id\" = %d) + 1\n" +
                 "WHERE \"Employee_id\" = %d", employee.employee_id, employee.employee_id));
-        workQueue.add(employee);
+        this.workQueue.add(employee);
+        assignOrders();
     }
 
     public void enlist(EmployeeApp employeeApp) {
         employeeApps.put(employeeApp.employee_id, employeeApp);
         workQueue.add(employeeApp);
+        assignOrders();
     }
 
     public int addOrder(int shopID, List<List<Integer>> products){
@@ -240,5 +242,10 @@ public class WarehouseServer{
     public void removeProduct(int productID){
         connector.query(String.format("DELETE FROM \"WH_Products\"\n" +
                 "    WHERE \"Product_id\" = %d", productID));
+    }
+
+    public EmployeeApp checkin(Integer integer) {
+        if(employeeApps.keySet().contains(integer)) return employeeApps.get(integer);
+        else return new EmployeeApp(this, integer);
     }
 }
