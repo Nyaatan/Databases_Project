@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import java.util.Vector;
+import java.awt.Dimension;
 
 import javax.swing.*;
 import javax.swing.event.InternalFrameEvent;
@@ -66,18 +67,21 @@ public class App extends JFrame implements ActionListener {
 
     public App() {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setSize(500, 500);
+        this.setSize(500, 700);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.createMenus();
 
         this.shopOrderListPanel = new JPanel();
         Vector<String> columnNames = new Vector<>();
-        columnNames.add("Order_id");
-        columnNames.add("Products");
+        columnNames.add("ID");
+        columnNames.add("Produkty");
         columnNames.add("Status");
         this.shopOrdersTableModel = new DefaultTableModel(columnNames, 0);
         this.shopOrdersTable = new JTable(shopOrdersTableModel);
+        this.shopOrdersTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+        this.shopOrdersTable.getColumnModel().getColumn(1).setPreferredWidth(330);
+        this.shopOrdersTable.getColumnModel().getColumn(2).setPreferredWidth(100);
         this.shopOrderListPanel.add(shopOrdersTable);
 
 
@@ -88,7 +92,11 @@ public class App extends JFrame implements ActionListener {
         columnNames.add("Available");
         this.shopNewOrderModel = new DefaultTableModel(columnNames, 0);
         this.shopNewOrderTable = new JTable(shopNewOrderModel);
-        this.shopNewOrderPanel.add(shopNewOrderTable);
+        this.shopNewOrderTable.setPreferredScrollableViewportSize(new Dimension(460,200));
+        this.shopNewOrderTable.setFillsViewportHeight(true);
+        JScrollPane shopNewOrderScroll = new JScrollPane(this.shopNewOrderTable);
+        shopNewOrderScroll.setVisible(true);
+        this.shopNewOrderPanel.add(shopNewOrderScroll);
         this.shopNewOrderCountField = new JTextField("Ilość");
         this.shopNewOrderPanel.add(shopNewOrderCountField);
         this.shopNewOrderSubmit = new JButton("Add");
@@ -99,7 +107,11 @@ public class App extends JFrame implements ActionListener {
         columnNames.add("Count");
         this.shopNewOrderedModel = new DefaultTableModel(columnNames, 0);
         this.shopNewOrderedTable = new JTable(shopNewOrderedModel);
-        this.shopNewOrderPanel.add(shopNewOrderedTable);
+        this.shopNewOrderedTable.setPreferredScrollableViewportSize(new Dimension(460,200));
+        this.shopNewOrderedTable.setFillsViewportHeight(true);
+        JScrollPane shopNewOrderedScroll = new JScrollPane(this.shopNewOrderedTable);
+        shopNewOrderedScroll.setVisible(true);
+        this.shopNewOrderPanel.add(shopNewOrderedScroll);
         this.shopNewOrderPlaceOrder = new JButton("Place order");
         this.shopNewOrderPanel.add(shopNewOrderPlaceOrder);
         shopNewOrderSubmit.addActionListener(e -> {
@@ -134,6 +146,8 @@ public class App extends JFrame implements ActionListener {
         columnNames.add("Count");
         this.tableModel = new DefaultTableModel(columnNames, 0);
         this.employeePanelProductList = new JTable(tableModel);
+        this.employeePanelProductList.getColumnModel().getColumn(0).setPreferredWidth(230);
+        this.employeePanelProductList.getColumnModel().getColumn(1).setPreferredWidth(230);
         this.employeePanel.add(this.employeePanelProductList);
         this.employeeCompleteButton = new JButton("Zamówienie gotowe");
         employeeCompleteButton.addActionListener(e -> {
@@ -155,7 +169,7 @@ public class App extends JFrame implements ActionListener {
         this.adminEmployeeListTable = new JTable(this.adminEmployeeListModel);
         this.adminEmployeeListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.adminEmployeeListTable.getColumnModel().getColumn(0).setPreferredWidth(20);
-        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(460);
+        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(440);
         this.adminEmployeeListPanel.add(new JLabel("Lista pracowników"));
         this.adminEmployeeListPanel.add(this.adminEmployeeListTable);
 
@@ -402,7 +416,7 @@ public class App extends JFrame implements ActionListener {
             shopOrdersTableModel.removeRow(0);
         }
         Vector<String> columnNames = new Vector<>();
-        columnNames.add("Order_id");
+        columnNames.add("ID");
         columnNames.add("Products");
         columnNames.add("Status");
         this.shopOrdersTableModel.addRow(columnNames);
