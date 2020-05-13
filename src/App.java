@@ -117,8 +117,11 @@ public class App extends JFrame implements ActionListener {
                     ch_array,
                     ch_array[0]);
 
-            for(int i = 0; i < choices.size(); i++) {
-                if(choices.get(i) == input) this.shop = new ShopApp(this.server, ids.get(i));
+            if(input == null) this.shop = new ShopApp(this.server, ids.get(0));
+            else {
+                for (int i = 0; i < choices.size(); i++) {
+                    if (choices.get(i) == input) this.shop = new ShopApp(this.server, ids.get(i));
+                }
             }
         }
         this.setTitle("Obsługa sklepu id: " + Integer.toString(this.shop.shop_id));
@@ -146,8 +149,11 @@ public class App extends JFrame implements ActionListener {
                     ch_array,
                     ch_array[0]);
 
-            for(int i = 0; i < choices.size(); i++) {
-                if(choices.get(i) == input) this.employee = server.checkin(ids.get(i));
+            if(input == null) this.employee = server.checkin(ids.get(0));
+            else {
+                for(int i = 0; i < choices.size(); i++) {
+                    if(choices.get(i) == input) this.employee = server.checkin(ids.get(i));
+                }
             }
         }
         setTitle("Obsługa pracownika id: " + Integer.toString(this.employee.employee_id));
