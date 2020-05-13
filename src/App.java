@@ -7,34 +7,35 @@ public class App extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JMenuBar shopMenuBar;
     private JMenuBar employeeMenuBar;
-    private JMenuBar managerMenuBar;
+    private JMenuBar adminMenuBar;
     private JMenu shopOrdersMenu;
-    private JMenu managerOrdersMenu;
-    private JMenu managerEmployeesMenu;
-    private JMenu managerShopsMenu;
+    private JMenu adminOrdersMenu;
+    private JMenu adminEmployeesMenu;
+    private JMenu adminShopsMenu;
     private JMenu shopModeMenu;
     private JMenu employeeModeMenu;
-    private JMenu managerModeMenu;
+    private JMenu adminModeMenu;
     private JMenuItem shopOrderListMenu;
-    private JMenuItem managerOrderListMenu;
+    private JMenuItem adminOrderListMenu;
     private JMenuItem shopNewOrderMenu;
     private JMenuItem shopToEmployeeMode;
-    private JMenuItem shopToManagerMode;
+    private JMenuItem shopToAdminMode;
     private JMenuItem employeeToShopMode;
-    private JMenuItem employeeToManagerMode;
-    private JMenuItem managerToShopMode;
-    private JMenuItem managerToEmployeeMode;
-    private JMenuItem managerEmployeeListMenu;
-    private JMenuItem managerShopListMenu;
+    private JMenuItem employeeToAdminMode;
+    private JMenuItem adminToShopMode;
+    private JMenuItem adminToEmployeeMode;
+    private JMenuItem adminEmployeeListMenu;
+    private JMenuItem adminShopListMenu;
     private JPanel shopOrderListPanel;
     private JPanel shopNewOrderPanel;
-    private JPanel managerOrderListPanel;
-    private JPanel managerEmployeeListPanel;
-    private JPanel managerShopListPanel;
+    private JPanel adminOrderListPanel;
+    private JPanel adminEmployeeListPanel;
+    private JPanel adminShopListPanel;
     private JPanel employeePanel;
 
     private EmployeeApp employee;
     private ShopApp shop;
+    private AdminApp admin;
     private WarehouseServer server;
 
     public static void main(String[] args) {
@@ -54,18 +55,19 @@ public class App extends JFrame implements ActionListener {
         this.shopNewOrderPanel.add(new JLabel("Nowe zamówienie"));
         this.employeePanel = new JPanel();
         this.employeePanel.add(new JLabel("Obsługiwane zamówienie"));
-        this.managerOrderListPanel = new JPanel();
-        this.managerOrderListPanel.add(new JLabel("Lista zamówień"));
-        this.managerEmployeeListPanel = new JPanel();
-        this.managerEmployeeListPanel.add(new JLabel("Lista pracowników"));
-        this.managerShopListPanel = new JPanel();
-        this.managerShopListPanel.add(new JLabel("Lista sklepów"));
+        this.adminOrderListPanel = new JPanel();
+        this.adminOrderListPanel.add(new JLabel("Lista zamówień"));
+        this.adminEmployeeListPanel = new JPanel();
+        this.adminEmployeeListPanel.add(new JLabel("Lista pracowników"));
+        this.adminShopListPanel = new JPanel();
+        this.adminShopListPanel.add(new JLabel("Lista sklepów"));
 
         this.shop = null;
         this.employee = null;
         this.server = new WarehouseServer();
+        this.admin = new AdminApp(this.server);
 
-        String[] choices = { "sklep", "pracownik", "manager" };
+        String[] choices = { "sklep", "pracownik", "admin" };
         String input = (String) JOptionPane.showInputDialog(this, "Kim jesteś:",
                 "Wybór roli", JOptionPane.QUESTION_MESSAGE, null,
                 choices,
@@ -75,12 +77,12 @@ public class App extends JFrame implements ActionListener {
         } else if (input == choices[1]){
             this.runEmployeeMode();
         } else if (input == choices[2]) {
-            this.runManagerMode();
+            this.runAdminMode();
         }
     }
 
     private void runShopMode() {
-        if(this.shop != null) {
+        if(this.shop == null) {
             String[] choices = { "Nazwa Firmy 1", "Nazwa Firmy 2", "Nazwa Firmy 3" };
             String input = (String) JOptionPane.showInputDialog(this, "Wybierz swoją firmę:",
                     "Wybór sklepu", JOptionPane.QUESTION_MESSAGE, null,
@@ -115,10 +117,10 @@ public class App extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void runManagerMode() {
-        setTitle("Obsługa managera");
-        this.setJMenuBar(this.managerMenuBar);
-        this.displayManagerOrderList();
+    private void runAdminMode() {
+        setTitle("Obsługa admina");
+        this.setJMenuBar(this.adminMenuBar);
+        this.displayAdminOrderList();
         setVisible(true);
     }
 
@@ -127,75 +129,75 @@ public class App extends JFrame implements ActionListener {
         String orders = "Zamówienie";
         String shop = "Sklep";
         String employee = "Pracownik";
-        String manager = "Manager";
+        String admin = "Admin";
         String orderList = "Lista zamówień";
 
         this.shopMenuBar = new JMenuBar();
         this.employeeMenuBar = new JMenuBar();
-        this.managerMenuBar = new JMenuBar();
+        this.adminMenuBar = new JMenuBar();
 
         this.shopModeMenu = new JMenu(changeMode);
         this.employeeModeMenu = new JMenu(changeMode);
-        this.managerModeMenu = new JMenu(changeMode);
+        this.adminModeMenu = new JMenu(changeMode);
         this.shopOrdersMenu = new JMenu(orders);
-        this.managerOrdersMenu = new JMenu(orders);
-        this.managerEmployeesMenu = new JMenu(employee);
-        this.managerShopsMenu = new JMenu(shop);
+        this.adminOrdersMenu = new JMenu(orders);
+        this.adminEmployeesMenu = new JMenu(employee);
+        this.adminShopsMenu = new JMenu(shop);
 
 
         this.shopToEmployeeMode = new JMenuItem(employee);
-        this.shopToManagerMode = new JMenuItem(manager);
+        this.shopToAdminMode = new JMenuItem(admin);
 
         this.employeeToShopMode = new JMenuItem(shop);
-        this.employeeToManagerMode = new JMenuItem(manager);
+        this.employeeToAdminMode = new JMenuItem(admin);
 
-        this.managerToShopMode = new JMenuItem(shop);
-        this.managerToEmployeeMode = new JMenuItem(employee);
+        this.adminToShopMode = new JMenuItem(shop);
+        this.adminToEmployeeMode = new JMenuItem(employee);
 
         this.shopNewOrderMenu = new JMenuItem("Nowe zamówienie");
         this.shopOrderListMenu = new JMenuItem(orderList);
-        this.managerOrderListMenu = new JMenuItem(orderList);
+        this.adminOrderListMenu = new JMenuItem(orderList);
 
-        this.managerShopListMenu = new JMenuItem("Lista sklepów");
-        this.managerEmployeeListMenu = new JMenuItem("Lista pracowników");
+        this.adminShopListMenu = new JMenuItem("Lista sklepów");
+        this.adminEmployeeListMenu = new JMenuItem("Lista pracowników");
 
         this.shopToEmployeeMode.addActionListener(this);
-        this.shopToManagerMode.addActionListener(this);
+        this.shopToAdminMode.addActionListener(this);
         this.employeeToShopMode.addActionListener(this);
-        this.employeeToManagerMode.addActionListener(this);
-        this.managerToShopMode.addActionListener(this);
-        this.managerToEmployeeMode.addActionListener(this);
+        this.employeeToAdminMode.addActionListener(this);
+        this.adminToShopMode.addActionListener(this);
+        this.adminToEmployeeMode.addActionListener(this);
         this.shopNewOrderMenu.addActionListener(this);
         this.shopOrderListMenu.addActionListener(this);
-        this.managerOrderListMenu.addActionListener(this);
-        this.managerShopListMenu.addActionListener(this);
-        this.managerEmployeeListMenu.addActionListener(this);
+        this.adminOrderListMenu.addActionListener(this);
+        this.adminShopListMenu.addActionListener(this);
+        this.adminEmployeeListMenu.addActionListener(this);
 
         this.shopModeMenu.add(this.shopToEmployeeMode);
-        this.shopModeMenu.add(this.shopToManagerMode);
+        this.shopModeMenu.add(this.shopToAdminMode);
 
         this.employeeModeMenu.add(this.employeeToShopMode);
-        this.employeeModeMenu.add(this.employeeToManagerMode);
+        this.employeeModeMenu.add(this.employeeToAdminMode);
 
-        this.managerModeMenu.add(this.managerToShopMode);
-        this.managerModeMenu.add(this.managerToEmployeeMode);
+        this.adminModeMenu.add(this.adminToShopMode);
+        this.adminModeMenu.add(this.adminToEmployeeMode);
 
         this.shopOrdersMenu.add(this.shopNewOrderMenu);
         this.shopOrdersMenu.add(this.shopOrderListMenu);
 
-        this.managerOrdersMenu.add(this.managerOrderListMenu);
-        this.managerEmployeesMenu.add(this.managerEmployeeListMenu);
-        this.managerShopsMenu.add(this.managerShopListMenu);
+        this.adminOrdersMenu.add(this.adminOrderListMenu);
+        this.adminEmployeesMenu.add(this.adminEmployeeListMenu);
+        this.adminShopsMenu.add(this.adminShopListMenu);
 
         this.shopMenuBar.add(this.shopOrdersMenu);
 
-        this.managerMenuBar.add(this.managerOrdersMenu);
-        this.managerMenuBar.add(this.managerEmployeesMenu);
-        this.managerMenuBar.add(this.managerShopsMenu);
+        this.adminMenuBar.add(this.adminOrdersMenu);
+        this.adminMenuBar.add(this.adminEmployeesMenu);
+        this.adminMenuBar.add(this.adminShopsMenu);
 
         this.shopMenuBar.add(this.shopModeMenu);
         this.employeeMenuBar.add(this.employeeModeMenu);
-        this.managerMenuBar.add(this.managerModeMenu);
+        this.adminMenuBar.add(this.adminModeMenu);
     }
 
     @Override
@@ -205,25 +207,25 @@ public class App extends JFrame implements ActionListener {
             this.employee = null;
             this.runEmployeeMode();
         }
-        if(source == this.shopToManagerMode) this.runManagerMode();
+        if(source == this.shopToAdminMode) this.runAdminMode();
         if(source == this.employeeToShopMode) {
             this.shop = null;
             this.runShopMode();
         }
-        if(source == this.employeeToManagerMode) this.runManagerMode();
-        if(source == this.managerToShopMode) {
+        if(source == this.employeeToAdminMode) this.runAdminMode();
+        if(source == this.adminToShopMode) {
             this.shop = null;
             this.runShopMode();
         }
-        if(source == this.managerToEmployeeMode) {
+        if(source == this.adminToEmployeeMode) {
             this.employee = null;
             this.runEmployeeMode();
         }
         if(source == this.shopNewOrderMenu) this.displayShopNewOrder();
         if(source == this.shopOrderListMenu) this.displayShopOrderList();
-        if(source == this.managerOrderListMenu) this.displayManagerOrderList();
-        if(source == this.managerShopListMenu) this.displayManagerShopList();
-        if(source == this.managerEmployeeListMenu) this.displayManagerEmployeeList();
+        if(source == this.adminOrderListMenu) this.displayAdminOrderList();
+        if(source == this.adminShopListMenu) this.displayAdminShopList();
+        if(source == this.adminEmployeeListMenu) this.displayAdminEmployeeList();
 
 
     }
@@ -246,20 +248,20 @@ public class App extends JFrame implements ActionListener {
         this.repaint();
     }
 
-    private void displayManagerOrderList() {
-        this.setContentPane(this.managerOrderListPanel);
+    private void displayAdminOrderList() {
+        this.setContentPane(this.adminOrderListPanel);
         this.revalidate();
         this.repaint();
     }
 
-    private void displayManagerShopList() {
-        this.setContentPane(this.managerShopListPanel);
+    private void displayAdminShopList() {
+        this.setContentPane(this.adminShopListPanel);
         this.revalidate();
         this.repaint();
     }
 
-    private void displayManagerEmployeeList() {
-        this.setContentPane(this.managerEmployeeListPanel);
+    private void displayAdminEmployeeList() {
+        this.setContentPane(this.adminEmployeeListPanel);
         this.revalidate();
         this.repaint();
     }
