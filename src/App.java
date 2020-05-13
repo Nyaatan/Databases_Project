@@ -120,7 +120,7 @@ public class App extends JFrame implements ActionListener {
             row.add((String) shopNewOrderTable.getValueAt(shopNewOrderTable.getSelectedRow(),0));
             row.add((String) shopNewOrderTable.getValueAt(shopNewOrderTable.getSelectedRow(),1));
             try {
-                Integer.parseInt(shopNewOrderCountField.getText());
+                if(Integer.parseInt(row.get(0)) - Integer.parseInt(shopNewOrderCountField.getText()) < 0) return;
             } catch(Exception a){
                 return;
             }
@@ -165,11 +165,15 @@ public class App extends JFrame implements ActionListener {
         columnNames = new Vector<>();
         columnNames.add("ID");
         columnNames.add("Imię i nazwisko");
+        columnNames.add("Wypełnione zamówienia");
+        columnNames.add("Pensja");
         this.adminEmployeeListModel = new DefaultTableModel(columnNames, 0);
         this.adminEmployeeListTable = new JTable(this.adminEmployeeListModel);
         this.adminEmployeeListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.adminEmployeeListTable.getColumnModel().getColumn(0).setPreferredWidth(20);
-        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(440);
+        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(280);
+        this.adminEmployeeListTable.getColumnModel().getColumn(2).setPreferredWidth(40);
+        this.adminEmployeeListTable.getColumnModel().getColumn(3).setPreferredWidth(100);
         this.adminEmployeeListPanel.add(new JLabel("Lista pracowników"));
         this.adminEmployeeListPanel.add(this.adminEmployeeListTable);
 
@@ -177,11 +181,13 @@ public class App extends JFrame implements ActionListener {
         columnNames = new Vector<>();
         columnNames.add("ID");
         columnNames.add("Nazwa");
+        columnNames.add("Adres");
         this.adminShopListModel = new DefaultTableModel(columnNames, 0);
         this.adminShopListTable = new JTable(this.adminShopListModel);
         this.adminShopListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.adminShopListTable.getColumnModel().getColumn(0).setPreferredWidth(20);
-        this.adminShopListTable.getColumnModel().getColumn(1).setPreferredWidth(460);
+        this.adminShopListTable.getColumnModel().getColumn(1).setPreferredWidth(230);
+        this.adminShopListTable.getColumnModel().getColumn(2).setPreferredWidth(230);
         this.adminShopListPanel.add(new JLabel("Lista sklepów"));
         this.adminShopListPanel.add(this.adminShopListTable);
 
@@ -476,9 +482,13 @@ public class App extends JFrame implements ActionListener {
     private void displayAdminShopList() {
         List<Map<String, String>> shops = this.admin.getShops();
         this.adminShopListModel.setRowCount(0);
-
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("ID");
+        columnNames.add("Nazwa");
+        columnNames.add("Adres");
+        this.adminEmployeeListModel.addRow(columnNames);
         for(int i = 0; i < shops.size(); i++) {
-            this.adminShopListModel.addRow(new Object[]{shops.get(i).get("Shop_id"), shops.get(i).get("Name")});
+            this.adminShopListModel.addRow(new Object[]{shops.get(i).get("Shop_id"), shops.get(i).get("Name"), shops.get(i).get("Address")});
         }
 
         this.setContentPane(this.adminShopListPanel);
@@ -489,9 +499,16 @@ public class App extends JFrame implements ActionListener {
     private void displayAdminEmployeeList() {
         List<Map<String, String>> employees = this.admin.getEmployees();
         this.adminEmployeeListModel.setRowCount(0);
-
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("ID");
+        columnNames.add("Imię i nazwisko");
+        columnNames.add("Ukończone zamówienia");
+        columnNames.add("Pensja");
+        this.adminEmployeeListModel.addRow(columnNames);
         for(int i = 0; i < employees.size(); i++) {
-            this.adminEmployeeListModel.addRow(new Object[]{employees.get(i).get("Employee_id"), employees.get(i).get("First_name") + " " + employees.get(i).get("Last_name")});
+            this.adminEmployeeListModel.addRow(new Object[]{employees.get(i).get("Employee_id"),
+                    employees.get(i).get("First_name") + " " + employees.get(i).get("Last_name"), employees.get(i).get("Completed_orders"),
+                    employees.get(i).get("Salary")});
         }
 
         this.setContentPane(this.adminEmployeeListPanel);

@@ -13,7 +13,7 @@ public class DataBaseConnector {
     private String user = "pwr_19_20_L_017241342";
     private String password = "pwr284630";
 
-    private Connection connection;
+    public Connection connection;
 
     public DataBaseConnector connect(){
         System.out.println("Connecting to database as " + user);
