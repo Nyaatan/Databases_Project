@@ -40,6 +40,8 @@ public class App extends JFrame implements ActionListener {
     private JPanel employeePanel;
     private JTable adminEmployeeListTable;
     private DefaultTableModel adminEmployeeListModel;
+    private JTable adminShopListTable;
+    private DefaultTableModel adminShopListModel;
     private JLabel employeePanelLabel;
     private JTable employeePanelProductList;
     private DefaultTableModel tableModel;
@@ -146,13 +148,28 @@ public class App extends JFrame implements ActionListener {
         this.adminOrderListPanel.add(new JLabel("Lista zamówień"));
 
         this.adminEmployeeListPanel = new JPanel();
-        this.adminEmployeeListModel = new DefaultTableModel(new Object[]{"ID", "Imię i nazwisko"}, 0);
+        columnNames = new Vector<>();
+        columnNames.add("ID");
+        columnNames.add("Imię i nazwisko");
+        this.adminEmployeeListModel = new DefaultTableModel(columnNames, 0);
         this.adminEmployeeListTable = new JTable(this.adminEmployeeListModel);
-        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(190);
+        this.adminEmployeeListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.adminEmployeeListTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(460);
+        this.adminEmployeeListPanel.add(new JLabel("Lista pracowników"));
         this.adminEmployeeListPanel.add(this.adminEmployeeListTable);
 
         this.adminShopListPanel = new JPanel();
+        columnNames = new Vector<>();
+        columnNames.add("ID");
+        columnNames.add("Nazwa");
+        this.adminShopListModel = new DefaultTableModel(columnNames, 0);
+        this.adminShopListTable = new JTable(this.adminShopListModel);
+        this.adminShopListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.adminShopListTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+        this.adminShopListTable.getColumnModel().getColumn(1).setPreferredWidth(460);
         this.adminShopListPanel.add(new JLabel("Lista sklepów"));
+        this.adminShopListPanel.add(this.adminShopListTable);
 
         this.shop = null;
         this.employee = null;
@@ -444,13 +461,11 @@ public class App extends JFrame implements ActionListener {
 
     private void displayAdminShopList() {
         List<Map<String, String>> shops = this.admin.getShops();
-        JComboBox<ComboItem> combo = new JComboBox<>();
-        this.adminShopListPanel = new JPanel();
+        this.adminShopListModel.setRowCount(0);
 
         for(int i = 0; i < shops.size(); i++) {
-            combo.addItem(new ComboItem(shops.get(i).get("Name"), shops.get(i).get("Shop_id")));
+            this.adminShopListModel.addRow(new Object[]{shops.get(i).get("Shop_id"), shops.get(i).get("Name")});
         }
-        this.adminShopListPanel.add(combo);
 
         this.setContentPane(this.adminShopListPanel);
         this.revalidate();
@@ -458,11 +473,11 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void displayAdminEmployeeList() {
-        List<Map<String, String>> shops = this.admin.getEmployees();
+        List<Map<String, String>> employees = this.admin.getEmployees();
         this.adminEmployeeListModel.setRowCount(0);
 
-        for(int i = 0; i < shops.size(); i++) {
-            this.adminEmployeeListModel.addRow(new Object[]{shops.get(i).get("Employee_id"), shops.get(i).get("First_name") + " " + shops.get(i).get("Last_name")});
+        for(int i = 0; i < employees.size(); i++) {
+            this.adminEmployeeListModel.addRow(new Object[]{employees.get(i).get("Employee_id"), employees.get(i).get("First_name") + " " + employees.get(i).get("Last_name")});
         }
 
         this.setContentPane(this.adminEmployeeListPanel);
