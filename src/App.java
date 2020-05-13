@@ -59,6 +59,9 @@ public class App extends JFrame implements ActionListener {
     private JTable shopNewOrderedTable;
     private DefaultTableModel shopNewOrderedModel;
     private JButton shopNewOrderPlaceOrder;
+    private JTable adminOrdersTable;
+    private DefaultTableModel adminOrdersTableModel;
+
 
     public static void main(String[] args) {
         new App();
@@ -144,8 +147,7 @@ public class App extends JFrame implements ActionListener {
 
         this.employeePanel.add(this.employeeCompleteButton);
 
-        this.adminOrderListPanel = new JPanel();
-        this.adminOrderListPanel.add(new JLabel("Lista zamówień"));
+
 
         this.adminEmployeeListPanel = new JPanel();
         columnNames = new Vector<>();
@@ -176,6 +178,17 @@ public class App extends JFrame implements ActionListener {
         this.adminShopListTable.getColumnModel().getColumn(2).setPreferredWidth(230);
         this.adminShopListPanel.add(new JLabel("Lista sklepów"));
         this.adminShopListPanel.add(this.adminShopListTable);
+
+        this.adminOrderListPanel = new JPanel();
+        columnNames = new Vector<>();
+        columnNames.add("Order_id");
+        columnNames.add("Shop_id_id");
+        columnNames.add("Products");
+        columnNames.add("Status");
+        this.adminOrdersTableModel = new DefaultTableModel(columnNames, 0);
+        this.adminOrdersTable = new JTable(adminOrdersTableModel);
+        this.adminOrderListPanel.add(adminOrdersTable);
+
 
         this.shop = null;
         this.employee = null;
@@ -460,6 +473,24 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void displayAdminOrderList() {
+        while(adminOrdersTableModel.getRowCount() > 0) {
+            adminOrdersTableModel.removeRow(0);
+        }
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("Order_id");
+        columnNames.add("Shop_id");
+        columnNames.add("Products");
+        columnNames.add("Status");
+        this.adminOrdersTableModel.addRow(columnNames);
+        List<Map<String, String>> orders = this.admin.getOrders();
+        for(Map<String, String> order : orders){
+            Vector<String> row = new Vector<>();
+            row.add(order.get("Order_id"));
+            row.add(order.get("Shop_id"));
+            row.add(order.get("Products"));
+            row.add(order.get("Status"));
+            adminOrdersTableModel.addRow(row);
+        }
         this.setContentPane(this.adminOrderListPanel);
         this.revalidate();
         this.repaint();
