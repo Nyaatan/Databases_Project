@@ -280,12 +280,30 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void displayAdminShopList() {
+        List<Map<String, String>> shops = this.admin.getShops();
+        JComboBox<ComboItem> combo = new JComboBox<>();
+        this.adminShopListPanel = new JPanel();
+
+        for(int i = 0; i < shops.size(); i++) {
+            combo.addItem(new ComboItem(shops.get(i).get("Name"), shops.get(i).get("Shop_id")));
+        }
+        this.adminShopListPanel.add(combo);
+
         this.setContentPane(this.adminShopListPanel);
         this.revalidate();
         this.repaint();
     }
 
     private void displayAdminEmployeeList() {
+        List<Map<String, String>> shops = this.admin.getEmployees();
+        JComboBox<ComboItem> combo = new JComboBox<>();
+        this.adminEmployeeListPanel = new JPanel();
+
+        for(int i = 0; i < shops.size(); i++) {
+            combo.addItem(new ComboItem(shops.get(i).get("First_name") + " " + shops.get(i).get("Last_name"), shops.get(i).get("Employee_id")));
+        }
+        this.adminEmployeeListPanel.add(combo);
+
         this.setContentPane(this.adminEmployeeListPanel);
         this.revalidate();
         this.repaint();
