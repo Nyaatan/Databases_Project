@@ -54,7 +54,7 @@ public class WarehouseServer{
             connector.query(String.format("INSERT INTO \"WH_Ordered_products\" VALUES (%d, %d, %d, %d)",orderProdID, orderID, productID, count));
             int product_count = Integer.parseInt(connector.fetch(String.format(
                     "SELECT * FROM \"WH_Products\" WHERE \"Product_id\" = %d", product.get(0))).get(0).get("Count"));
-            connector.query(String.format("UPDATE \"WH_Products SET \"Count\" = %d", product_count - product.get(1)));
+            connector.query(String.format("UPDATE \"WH_Products\" SET \"Count\" = %d", product_count - product.get(1)));
         }
         return orderID;
     }

@@ -414,10 +414,6 @@ public class App extends JFrame implements ActionListener {
             this.employeePanelLabel.setText(String.format(
                     "Obsługiwane zamówienie: %d", this.employee.current_order_id));
 
-            Vector<String> columnNames = new Vector<>();
-            columnNames.add("Product_id");
-            columnNames.add("Count");
-            this.tableModel.addRow(columnNames);
 
             for(Map<String, String> product : this.employee.orderProducts){
                 //this.employeePanelListModel.addElement(String.format("[ID] %s: %s", product.get("Product_id"), product.get("Count")));
@@ -439,11 +435,6 @@ public class App extends JFrame implements ActionListener {
         while(shopOrdersTableModel.getRowCount() > 0) {
             shopOrdersTableModel.removeRow(0);
         }
-        Vector<String> columnNames = new Vector<>();
-        columnNames.add("ID");
-        columnNames.add("Products");
-        columnNames.add("Status");
-        this.shopOrdersTableModel.addRow(columnNames);
         Map<Integer, List<Product>> orders = this.shop.getOrdersDetails();
         for(Integer order : orders.keySet()){
             Vector<String> row = new Vector<>();
@@ -465,17 +456,6 @@ public class App extends JFrame implements ActionListener {
         while(shopNewOrderModel.getRowCount() > 0) {
             shopNewOrderModel.removeRow(0);
         }
-        Vector<String> columnNames = new Vector<>();
-        columnNames.add("Product ID");
-        columnNames.add("Product Name");
-        columnNames.add("Available");
-        this.shopNewOrderModel.addRow(columnNames);
-
-        columnNames = new Vector<>();
-        columnNames.add("Product ID");
-        columnNames.add("Product Name");
-        columnNames.add("Count");
-        this.shopNewOrderedModel.addRow(columnNames);
 
         List<Map<String, String>> productsRaw = this.shop.getProducts();
         for(Map<String, String> product : productsRaw){
@@ -495,12 +475,6 @@ public class App extends JFrame implements ActionListener {
         while(adminOrdersTableModel.getRowCount() > 0) {
             adminOrdersTableModel.removeRow(0);
         }
-        Vector<String> columnNames = new Vector<>();
-        columnNames.add("Order_id");
-        columnNames.add("Shop_id");
-        columnNames.add("Products");
-        columnNames.add("Status");
-        this.adminOrdersTableModel.addRow(columnNames);
         List<Map<String, String>> orders = this.admin.getOrders();
         for(Map<String, String> order : orders){
             Vector<String> row = new Vector<>();
@@ -518,11 +492,6 @@ public class App extends JFrame implements ActionListener {
     private void displayAdminShopList() {
         List<Map<String, String>> shops = this.admin.getShops();
         this.adminShopListModel.setRowCount(0);
-        Vector<String> columnNames = new Vector<>();
-        columnNames.add("ID");
-        columnNames.add("Nazwa");
-        columnNames.add("Adres");
-        this.adminEmployeeListModel.addRow(columnNames);
         for(int i = 0; i < shops.size(); i++) {
             this.adminShopListModel.addRow(new Object[]{shops.get(i).get("Shop_id"), shops.get(i).get("Name"), shops.get(i).get("Address")});
         }
@@ -535,12 +504,6 @@ public class App extends JFrame implements ActionListener {
     private void displayAdminEmployeeList() {
         List<Map<String, String>> employees = this.admin.getEmployees();
         this.adminEmployeeListModel.setRowCount(0);
-        Vector<String> columnNames = new Vector<>();
-        columnNames.add("ID");
-        columnNames.add("Imię i nazwisko");
-        columnNames.add("Ukończone zamówienia");
-        columnNames.add("Pensja");
-        this.adminEmployeeListModel.addRow(columnNames);
         for(int i = 0; i < employees.size(); i++) {
             this.adminEmployeeListModel.addRow(new Object[]{employees.get(i).get("Employee_id"),
                     employees.get(i).get("First_name") + " " + employees.get(i).get("Last_name"), employees.get(i).get("Completed_orders"),
