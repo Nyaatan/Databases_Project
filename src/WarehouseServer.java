@@ -112,7 +112,7 @@ public class WarehouseServer{
     }
 
     public List<Map<String, String>> getShops(){
-        return connector.fetch("SELECT * FROM \"WH_Products\"");
+        return connector.fetch("SELECT * FROM \"WH_Shops\"");
     }
 
     public List<Map<String, String>> getOrderedProducts(){
