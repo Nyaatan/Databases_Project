@@ -37,7 +37,7 @@ public class WarehouseServer{
         workQueue.add(employeeApp);
     }
 
-    public void addOrder(int shopID, List<List<Integer>> products){
+    public int addOrder(int shopID, List<List<Integer>> products){
         int orderID = Integer.parseInt(connector.fetch("SELECT MAX(\"Order_id\") FROM \"WH_Orders\"").get(0).get("MAX(\"ORDER_ID\")")) + 1;
         connector.query(String.format("INSERT INTO \"WH_Orders\"\n" +
                 "    VALUES (%d, %d, NULL, 'Waiting')", orderID, shopID));
@@ -49,6 +49,7 @@ public class WarehouseServer{
             int count = product.get(1);
             connector.query(String.format("INSERT INTO \"WH_Ordered_products\" VALUES (%d, %d, %d, %d)",orderProdID, orderID, productID, count));
         }
+        return orderID;
     }
 
     public void employeeGetOrder(int orderID){
