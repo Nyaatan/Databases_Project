@@ -106,7 +106,7 @@ public class App extends JFrame implements ActionListener {
             row.add((String) shopNewOrderTable.getValueAt(shopNewOrderTable.getSelectedRow(),0));
             row.add((String) shopNewOrderTable.getValueAt(shopNewOrderTable.getSelectedRow(),1));
             try {
-                Integer.parseInt(shopNewOrderCountField.getText());
+                if(Integer.parseInt(row.get(0)) - Integer.parseInt(shopNewOrderCountField.getText()) < 0) return;
             } catch(Exception a){
                 return;
             }
