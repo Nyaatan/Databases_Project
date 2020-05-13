@@ -9,6 +9,7 @@ public class WarehouseServer{
         connector = new DataBaseConnector();
         employeeApps = new HashMap<>();
         workQueue = new ArrayList<>();
+        resetOrders();
     }
 
     public void changeOrderStatus(String status, String orderID){
@@ -78,17 +79,9 @@ public class WarehouseServer{
         return orders;
     }
 
-    public void enlistEmployees(){
-        List<Map<String, String>> employeesRaw = connector.fetch("SELECT \"Employee_id\" FROM \"WH_Employees\"" );
-        for(Map<String, String> row : employeesRaw){
-            new EmployeeApp(this, Integer.parseInt(row.get("Employee_id")));
-        }
-        List<Map<String, String>> pendingOrdersRaw = connector.fetch("SELECT \"Order_id\" " +
-                " FROM \"WH_Orders\" WHERE \"Status\" = 'In progress'");
-        for(Map<String, String> row : pendingOrdersRaw){
-            int orderID = Integer.parseInt(row.get("Order_id"));
-            employeeGetOrder(orderID);
-        }
+    public void resetOrders(){
+        connector.query("UPDATE \"WH_Orders\"" +
+                "SET \"Employee_id\" = NULL, \"Status\" = 'Waiting' WHERE \"Status\" = 'In progress'");
     }
 
     public void addEmployee(String firstName, String lastName, double salary){
