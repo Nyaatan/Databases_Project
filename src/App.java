@@ -171,8 +171,8 @@ public class App extends JFrame implements ActionListener {
         this.adminEmployeeListTable = new JTable(this.adminEmployeeListModel);
         this.adminEmployeeListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.adminEmployeeListTable.getColumnModel().getColumn(0).setPreferredWidth(20);
-        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(280);
-        this.adminEmployeeListTable.getColumnModel().getColumn(2).setPreferredWidth(40);
+        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        this.adminEmployeeListTable.getColumnModel().getColumn(2).setPreferredWidth(140);
         this.adminEmployeeListTable.getColumnModel().getColumn(3).setPreferredWidth(100);
         this.adminEmployeeListPanel.add(new JLabel("Lista pracowników"));
         this.adminEmployeeListPanel.add(this.adminEmployeeListTable);
