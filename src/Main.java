@@ -26,13 +26,13 @@ public class Main {
 //        server.assignOrders();
 //        server.employeeApps.get(2).completeOrder();
 //        server.assignOrders();
-        server.enlistEmployees();
+        server.resetOrders();
 //        server.removeShop(2);
 //        server.removeEmployee(3);
-        Map<String, String> arg =  new HashMap<>();
-        arg.put("First_name", "'Gonzales'");
-        arg.put("Salary", "7000");
-        server.updateEmployee(1,arg);
+//        Map<String, String> arg =  new HashMap<>();
+//        arg.put("First_name", "'Gonzales'");
+//        arg.put("Salary", "7000");
+//        server.updateEmployee(1,arg);
     }
 
     public static void print(Object arg){
