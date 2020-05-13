@@ -6,6 +6,7 @@ public class ShopApp {
     public List<Integer> orders = new ArrayList();
     public WarehouseServer server;
     public List<Map<String, String>> productsAvailable;
+    public List<List<Integer>> currOrder = new ArrayList<>();
 
     public ShopApp(WarehouseServer server, int shop_id){
         this.server = server;
@@ -17,8 +18,13 @@ public class ShopApp {
         for(Map<String, String> order : ordersShopID) orders.add(Integer.parseInt(order.get("Order_id")));
     }
 
-    public void makeOrder(List<List<Integer>> productsList){
-        orders.add(server.addOrder(this.shop_id, productsList));
+    public void addToOrder(List<Integer> product){
+        currOrder.add(product);
+    }
+
+    public void makeOrder(){
+        orders.add(server.addOrder(this.shop_id, currOrder));
+        currOrder.clear();
     }
 
     public void cancelOrder(int order_id){
@@ -47,14 +53,5 @@ public class ShopApp {
 
     public String getOrderStatus(int orderID){
         return server.getOrderStatus(orderID);
-    }
-
-    public static Map<String, Integer> getShopNamesIDs(WarehouseServer server){
-        Map<String, Integer>  shopNamesIDs = new HashMap<>();
-        List<Map<String, String>> shops = server.getShops();
-        for(Map<String, String> shop : shops){
-            shopNamesIDs.put(shop.get("Name"), Integer.parseInt(shop.get("Shop_id")));
-        }
-        return shopNamesIDs;
     }
 }

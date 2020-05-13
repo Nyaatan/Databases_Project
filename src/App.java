@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class App extends JFrame implements ActionListener {
@@ -49,6 +50,13 @@ public class App extends JFrame implements ActionListener {
     private WarehouseServer server;
     private DefaultTableModel shopOrdersTableModel;
     private JTable shopOrdersTable;
+    private DefaultTableModel shopNewOrderModel;
+    private JTable shopNewOrderTable;
+    private JTextField shopNewOrderCountField;
+    private JButton shopNewOrderSubmit;
+    private JTable shopNewOrderedTable;
+    private DefaultTableModel shopNewOrderedModel;
+    private JButton shopNewOrderPlaceOrder;
 
     public static void main(String[] args) {
         new App();
@@ -70,8 +78,51 @@ public class App extends JFrame implements ActionListener {
         this.shopOrdersTable = new JTable(shopOrdersTableModel);
         this.shopOrderListPanel.add(shopOrdersTable);
 
+
         this.shopNewOrderPanel = new JPanel();
-        this.shopNewOrderPanel.add(new JLabel("Nowe zamówienie"));
+        columnNames = new Vector<>();
+        columnNames.add("Product ID");
+        columnNames.add("Product Name");
+        columnNames.add("Available");
+        this.shopNewOrderModel = new DefaultTableModel(columnNames, 0);
+        this.shopNewOrderTable = new JTable(shopNewOrderModel);
+        this.shopNewOrderPanel.add(shopNewOrderTable);
+        this.shopNewOrderCountField = new JTextField("Ilość");
+        this.shopNewOrderPanel.add(shopNewOrderCountField);
+        this.shopNewOrderSubmit = new JButton("Add");
+        this.shopNewOrderPanel.add(this.shopNewOrderSubmit);
+        columnNames = new Vector<>();
+        columnNames.add("Product ID");
+        columnNames.add("Product Name");
+        columnNames.add("Count");
+        this.shopNewOrderedModel = new DefaultTableModel(columnNames, 0);
+        this.shopNewOrderedTable = new JTable(shopNewOrderedModel);
+        this.shopNewOrderPanel.add(shopNewOrderedTable);
+        this.shopNewOrderPlaceOrder = new JButton("Place order");
+        this.shopNewOrderPanel.add(shopNewOrderPlaceOrder);
+        shopNewOrderSubmit.addActionListener(e -> {
+            if(shopNewOrderTable.getSelectedRow() == -1) return;
+            Vector<String> row = new Vector<>();
+            row.add((String) shopNewOrderTable.getValueAt(shopNewOrderTable.getSelectedRow(),0));
+            row.add((String) shopNewOrderTable.getValueAt(shopNewOrderTable.getSelectedRow(),1));
+            try {
+                Integer.parseInt(shopNewOrderCountField.getText());
+            } catch(Exception a){
+                return;
+            }
+            row.add(shopNewOrderCountField.getText());
+            shopNewOrderedModel.addRow(row);
+            List<Integer> product = new ArrayList<>();
+            product.add(Integer.parseInt(row.get(0)));
+            product.add(Integer.parseInt(row.get(2)));
+            this.shop.addToOrder(product);
+            this.revalidate();
+            this.repaint();
+        });
+        shopNewOrderPlaceOrder.addActionListener(e -> {
+            this.shop.makeOrder();
+            displayShopNewOrder();
+        });
 
         this.employeePanel = new JPanel();
         this.employeePanelLabel = new JLabel("Obsługiwane zamówienie: Brak");
@@ -353,6 +404,33 @@ public class App extends JFrame implements ActionListener {
     }
 
     private void displayShopNewOrder() {
+        while(shopNewOrderedModel.getRowCount() > 0) {
+            shopNewOrderedModel.removeRow(0);
+        }
+        while(shopNewOrderModel.getRowCount() > 0) {
+            shopNewOrderModel.removeRow(0);
+        }
+        Vector<String> columnNames = new Vector<>();
+        columnNames.add("Product ID");
+        columnNames.add("Product Name");
+        columnNames.add("Available");
+        this.shopNewOrderModel.addRow(columnNames);
+
+        columnNames = new Vector<>();
+        columnNames.add("Product ID");
+        columnNames.add("Product Name");
+        columnNames.add("Count");
+        this.shopNewOrderedModel.addRow(columnNames);
+
+        List<Map<String, String>> productsRaw = this.shop.getProducts();
+        for(Map<String, String> product : productsRaw){
+            Vector<String> row = new Vector<>();
+            row.add(product.get("Product_id"));
+            row.add(product.get("Name"));
+            row.add(product.get("Count"));
+            shopNewOrderModel.addRow(row);
+        }
+
         this.setContentPane(this.shopNewOrderPanel);
         this.revalidate();
         this.repaint();
