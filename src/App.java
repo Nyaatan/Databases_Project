@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class App extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -35,6 +36,8 @@ public class App extends JFrame implements ActionListener {
     private JPanel adminEmployeeListPanel;
     private JPanel adminShopListPanel;
     private JPanel employeePanel;
+    private JTable adminEmployeeListTable;
+    private DefaultTableModel adminEmployeeListModel;
     private JLabel employeePanelLabel;
     private JList employeePanelProductList;
     private DefaultListModel employeePanelListModel;
@@ -59,6 +62,7 @@ public class App extends JFrame implements ActionListener {
         this.shopOrderListPanel.add(new JLabel("Lista zamówień"));
         this.shopNewOrderPanel = new JPanel();
         this.shopNewOrderPanel.add(new JLabel("Nowe zamówienie"));
+
         this.employeePanel = new JPanel();
         this.employeePanelLabel = new JLabel("Obsługiwane zamówienie: Brak");
         this.employeePanel.add(employeePanelLabel);
@@ -72,10 +76,16 @@ public class App extends JFrame implements ActionListener {
             displayEmployee();
         });
         this.employeePanel.add(this.employeeCompleteButton);
+
         this.adminOrderListPanel = new JPanel();
         this.adminOrderListPanel.add(new JLabel("Lista zamówień"));
+
         this.adminEmployeeListPanel = new JPanel();
-        this.adminEmployeeListPanel.add(new JLabel("Lista pracowników"));
+        this.adminEmployeeListModel = new DefaultTableModel(new Object[]{"ID", "Imię i nazwisko"}, 0);
+        this.adminEmployeeListTable = new JTable(this.adminEmployeeListModel);
+        this.adminEmployeeListTable.getColumnModel().getColumn(1).setPreferredWidth(190);
+        this.adminEmployeeListPanel.add(this.adminEmployeeListTable);
+
         this.adminShopListPanel = new JPanel();
         this.adminShopListPanel.add(new JLabel("Lista sklepów"));
 
@@ -327,13 +337,11 @@ public class App extends JFrame implements ActionListener {
 
     private void displayAdminEmployeeList() {
         List<Map<String, String>> shops = this.admin.getEmployees();
-        JComboBox<ComboItem> combo = new JComboBox<>();
-        this.adminEmployeeListPanel = new JPanel();
+        this.adminEmployeeListModel.setRowCount(0);
 
         for(int i = 0; i < shops.size(); i++) {
-            combo.addItem(new ComboItem(shops.get(i).get("First_name") + " " + shops.get(i).get("Last_name"), shops.get(i).get("Employee_id")));
+            this.adminEmployeeListModel.addRow(new Object[]{shops.get(i).get("Employee_id"), shops.get(i).get("First_name") + " " + shops.get(i).get("Last_name")});
         }
-        this.adminEmployeeListPanel.add(combo);
 
         this.setContentPane(this.adminEmployeeListPanel);
         this.revalidate();
