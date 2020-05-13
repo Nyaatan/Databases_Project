@@ -118,7 +118,7 @@ public class App extends JFrame implements ActionListener {
             List<String> choices = new ArrayList<String>();
             List<Integer> ids = new ArrayList<Integer>();
 
-            List<Map<String, String>> employees = this.admin.getShops();
+            List<Map<String, String>> employees = this.admin.getEmployees();
 
             for(int i = 0; i < employees.size(); i++) {
                 choices.add(employees.get(i).get("First_name") + " " + employees.get(i).get("Last_name"));
