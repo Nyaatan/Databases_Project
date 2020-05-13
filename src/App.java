@@ -115,17 +115,28 @@ public class App extends JFrame implements ActionListener {
 
     private void runEmployeeMode() {
         if(this.employee == null) {
-            String[] choices = { "Adam Nowak", "Arutur śliwa", "Sracz 2" };
+            List<String> choices = new ArrayList<String>();
+            List<Integer> ids = new ArrayList<Integer>();
+
+            List<Map<String, String>> employees = this.admin.getShops();
+
+            for(int i = 0; i < employees.size(); i++) {
+                choices.add(employees.get(i).get("First_name") + " " + employees.get(i).get("Last_name"));
+                ids.add(Integer.parseInt(employees.get(i).get("Employee_id")));
+            }
+            String[] ch_array = new String[choices.size()];
+            choices.toArray(ch_array);
+
             String input = (String) JOptionPane.showInputDialog(null, "Wybierz siebie z listy:",
                     "Wybór pracownika", JOptionPane.QUESTION_MESSAGE, null,
-                    choices,
-                    choices[0]);
+                    ch_array,
+                    ch_array[0]);
 
-            for(int i = 0; i < choices.length; i++) {
-                if(choices[i] == input) this.employee = new EmployeeApp(this.server, 1);
+            for(int i = 0; i < choices.size(); i++) {
+                if(choices.get(i) == input) this.employee = new EmployeeApp(this.server, ids.get(i));
             }
         }
-        setTitle("Obsługa pracownika");
+        setTitle("Obsługa pracownika id: " + Integer.toString(this.employee.employee_id));
         this.setJMenuBar(this.employeeMenuBar);
         this.displayEmployee();
         setVisible(true);
